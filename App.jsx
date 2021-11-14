@@ -1,6 +1,6 @@
 import {StatusBar} from 'expo-status-bar';
 import React, {useState} from 'react';
-import {StyleSheet, Text, View, FlatList} from 'react-native';
+import {StyleSheet, Text, View, FlatList, SafeAreaView} from 'react-native';
 import styled from 'styled-components/native'
 import * as Font from 'expo-font'
 import AppLoading from 'expo-app-loading'
@@ -32,23 +32,22 @@ const StyledText = styled.Text`
 const StyledTodos = styled.View`
 
   flex: 1;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 `
 
 const StyleAddTodo = styled.TouchableOpacity`
    
 `
 
-const StyleWrapApp = styled.View`
+const StyleWrapApp = styled.SafeAreaView`
   height: 100%;
-  padding-bottom: 10px;
 `
 
 
 export default function App() {
     const [isReady, setIsReady] = useState(false);
     const [todos, setTodos] = useState([
-        {id: 1, title: 'test1'},
+        {id: 1, title: 'test13'},
         {id: 2, title: 'test'},
         {id: 3, title: 'test'},
         {id: 4, title: 'test'},
@@ -94,7 +93,7 @@ export default function App() {
     return (
         <StyleWrapApp>
             <Navbar title='Todo App'/>
-            <AddTodo addItem={addTodo} isUniqueTodo={isUniqueTodo}/>
+
             <StyledTodos>
                 <StyledFlatList
                     data={todos}
@@ -102,6 +101,8 @@ export default function App() {
                     keyExtractor={item => item.id.toString()}
                 />
             </StyledTodos>
+
+            <AddTodo addItem={addTodo} isUniqueTodo={isUniqueTodo}/>
             {/*<StyleAddTodo onPress={() => addTodo("add")}>*/}
             {/*    <AntDesign.View*/}
 

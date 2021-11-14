@@ -23,7 +23,7 @@ import styled from "styled-components/native";
 const WrapAddTodo = styled.View`
   flex-direction: row;
   justify-content: center;
-  padding-bottom: 25px;
+  padding-bottom: 5px;
 `
 
 const StyleButton = styled.Button`
@@ -68,6 +68,7 @@ export const AddTodo = ({addItem, isUniqueTodo}) => {
         if (title.trim() !== "") {
             addItem(title);
             setTitle("");
+            Keyboard.dismiss();
         } else {
             setError("Title is required");
             Alert.alert("Title is required")
@@ -80,11 +81,11 @@ export const AddTodo = ({addItem, isUniqueTodo}) => {
     }
 
     const onInputKeyPress = (e) => {
+        console.log(e.charCode)
         if (error !== null) {
             setError(null);
         }
         if (e.charCode === 13) {
-
             onAddItemClick();
         }
     }
@@ -97,6 +98,7 @@ export const AddTodo = ({addItem, isUniqueTodo}) => {
 
                 onChangeText={setTitle}
                 onKeyPress={onInputKeyPress}
+                onSubmitEditing={onAddItemClick}
                 value={title}
                 placeholder='New todo'
                 autoCorrect={false}
