@@ -11,13 +11,13 @@ import {
     Pressable,
     TouchableOpacity
 } from 'react-native';
-// import {Chip} from 'react-native-elements';
-// import Icon from 'react-native-vector-icons/FontAwesome';
 import {AntDesign} from '@expo/vector-icons';
 import {MaterialIcons} from '@expo/vector-icons';
 
 
 import styled from "styled-components/native";
+import {useDispatch} from "react-redux";
+import {changeTodoTitleAC} from "../../store/reducers/todo-reducer";
 
 
 const WrapAddTodo = styled.View`
@@ -47,87 +47,40 @@ const StyleTextError = styled.Text`
     color: red;
 `
 
-export const AddTodo = ({addItem, isUniqueTodo}) => {
-    // const [value, setValue] = useState('')
-    //
-    // const onAddPress = () => {
-    //     onSubmit(value)
-    //     setValue
-    // }
-
-    let [title, setTitle] = useState("")
-    let [error, setError] = useState("")
-
+export const AddTodo = (props) => {
+    const {addOrChangeTodo, isUniqueTodo, refToInput, editMode, id, title} = props
+    let [tmpTitle, setTmpTitle] = useState(editMode ? title : '')
 
     const onAddItemClick = () => {
-        if (isUniqueTodo(title)) {
+        if (isUniqueTodo(tmpTitle)) {
             Alert.alert("Title already exists")
             return null
         }
-
-        if (title.trim() !== "") {
-            addItem(title);
-            setTitle("");
-            Keyboard.dismiss();
-        } else {
-            setError("Title is required");
+        if (tmpTitle.trim() === "") {
             Alert.alert("Title is required")
+            return null
         }
-
-    }
-
-    const onInputChange = () => {
-        setError("")
-    }
-
-    const onInputKeyPress = (e) => {
-        console.log(e.charCode)
-        if (error !== null) {
-            setError(null);
-        }
-        if (e.charCode === 13) {
-            onAddItemClick();
-        }
+        addOrChangeTodo(id, tmpTitle);
+        setTmpTitle("");
+        Keyboard.dismiss();
     }
 
     return (
         <WrapAddTodo>
-
-
             <StyleTextInput
-
-                onChangeText={setTitle}
-                onKeyPress={onInputKeyPress}
+                onChangeText={setTmpTitle}
                 onSubmitEditing={onAddItemClick}
-                value={title}
+                value={tmpTitle}
                 placeholder='New todo'
                 autoCorrect={false}
                 autoCapitalize='none'
+                // ref={refToInput}
+                ref={refToInput}
             />
-            {/*<AntDesign.Button*/}
-            {/*    style={styles.button}*/}
-            {/*    onPress={onAddItemClick}*/}
-            {/*    name={"pluscircleo"}*/}
-            {/*/>*/}
             <TouchableOpacity onPress={onAddItemClick}>
                 <MaterialIcons name={'add-box'} size={41} style={{color: "#007AFF",}}/>
             </TouchableOpacity>
-            {/*<Chip*/}
-            {/*    icon={{*/}
-            {/*        name: "bluetooth",*/}
-            {/*        type: "font-awesome",*/}
-            {/*        size: 20,*/}
-            {/*        color: 'white'*/}
-            {/*    }}/>*/}
-
-            {/*<StyleTextError>{error}</StyleTextError>*/}
         </WrapAddTodo>
     );
 };
 
-
-const styles = StyleSheet.create({
-    button: {
-        borderRadius: 20
-    }
-})
