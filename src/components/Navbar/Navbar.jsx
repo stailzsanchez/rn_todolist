@@ -10,7 +10,8 @@ const StyleNavbar = styled.View`
   justify-content:flex-end;
   background-color: #3949ab;
   padding-bottom: 10px;
-  margin-bottom: 15px;
+
+  z-index: 4;
 `
 
 const StyleText = styled.Text`
