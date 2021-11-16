@@ -46,9 +46,6 @@ const NoTodoText = styled.Text`
 
 
 export default function TodoList() {
-    const [editMode, setEditMode] = useState(false);
-    const [editTodoId, setEditTodoId] = useState(null);
-    const refToInput = useRef();
 
     const dispatch = useDispatch()
     let todoList = useSelector(state => state.todos)
@@ -64,43 +61,7 @@ export default function TodoList() {
     }, []);
 
 
-    const addOrChangeTodo = (id, title) => {
-        if (editMode) {
-            dispatch(changeTodoTitleAC(id, title))
-        } else {
-            dispatch(addTodoAC(title))
-        }
-    }
-
-
-    const isUniqueTodo = (title) =>
-        todoList.some(todo => todo.title === title)
-
-
-    // const addTodo = (title) => {
-    //     setTodos((prev) => [{
-    //         id: uuid.v4(),
-    //         title
-    //     }, ...prev])
-    //     // console.dir(todos)
-    // }
-    //
-    // // const renderItem = ({item}) => <Todo title={item.title}/>
-    //
-    // const isUniqueTodo = (title) =>
-    //     todos.some(todo => todo.title === title)
-    //
-    // const removeTodo = id => {
-    //     setTodos(todos.filter((todo) => todo.id !== id))
-    // }
-    //
-    // const changedStatus = (id) => {
-    //     const copyState = [...todos]
-    //     let tmpTodo = copyState.find(todo => todo.id === id)
-    //     copyState[id] = {...tmpTodo, isDone: !tmpTodo.isDone};
-    //
-    //     setTodos([...copyState])
-    // }
+    const isUniqueTodo = (title) => todoList.some(todo => todo.title === title)
 
     return (
         <StyleWrapApp>
@@ -110,20 +71,14 @@ export default function TodoList() {
                 <StyledFlatList
                     data={todoList}
                     renderItem={({item}) =>
-                        <Todo key={item.id} todo={item}
-                              setEditMode={setEditMode}
-                              setEditTodoId={setEditTodoId}
-                              refToInput={refToInput}
+                        <Todo key={item.id} {...item}
                         />}
                     keyExtractor={item => item.id.toString()}
                 />
             </StyledTodos>
 
-            <AddTodo addOrChangeTodo={addOrChangeTodo}
-                     isUniqueTodo={isUniqueTodo}
-                     editMode={editMode}
-                     editTodoId={editTodoId}
-                     refToInput={refToInput}
+            <AddTodo
+                isUniqueTodo={isUniqueTodo}
             />
         </StyleWrapApp>
     );

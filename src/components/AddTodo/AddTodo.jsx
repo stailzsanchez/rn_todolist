@@ -17,7 +17,7 @@ import {MaterialIcons} from '@expo/vector-icons';
 
 import styled from "styled-components/native";
 import {useDispatch} from "react-redux";
-import {changeTodoTitleAC} from "../../store/reducers/todo-reducer";
+import {addTodoWithApiDate, changeTodoTitleAC} from "../../store/reducers/todo-reducer";
 
 
 const WrapAddTodo = styled.View`
@@ -48,34 +48,35 @@ const StyleTextError = styled.Text`
 `
 
 export const AddTodo = (props) => {
-    const {addOrChangeTodo, isUniqueTodo, refToInput, editMode, id, title} = props
-    let [tmpTitle, setTmpTitle] = useState(editMode ? title : '')
+
+    const dispatch = useDispatch()
+
+    const {isUniqueTodo} = props
+    let [title, setTitle] = useState('')
 
     const onAddItemClick = () => {
-        if (isUniqueTodo(tmpTitle)) {
+        if (isUniqueTodo(title)) {
             Alert.alert("Title already exists")
             return null
         }
-        if (tmpTitle.trim() === "") {
+        if (title.trim() === "") {
             Alert.alert("Title is required")
             return null
         }
-        addOrChangeTodo(id, tmpTitle);
-        setTmpTitle("");
+        dispatch(addTodoWithApiDate(title))
+        setTitle("");
         Keyboard.dismiss();
     }
 
     return (
         <WrapAddTodo>
             <StyleTextInput
-                onChangeText={setTmpTitle}
+                onChangeText={setTitle}
                 onSubmitEditing={onAddItemClick}
-                value={tmpTitle}
-                placeholder='New todo'
+                value={title}
+                placeholder='Click to enter'
                 autoCorrect={false}
                 autoCapitalize='none'
-                // ref={refToInput}
-                ref={refToInput}
             />
             <TouchableOpacity onPress={onAddItemClick}>
                 <MaterialIcons name={'add-box'} size={41} style={{color: "#007AFF",}}/>
