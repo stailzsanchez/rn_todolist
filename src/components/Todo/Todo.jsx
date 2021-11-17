@@ -1,11 +1,12 @@
-import React, {useState} from 'react';
-import {Text, View, TouchableOpacity, Button, Dimensions} from 'react-native';
-import {Entypo, MaterialIcons} from '@expo/vector-icons';
+import React from 'react';
+import {Dimensions, TouchableOpacity} from 'react-native';
+import {Entypo} from '@expo/vector-icons';
 import Checkbox from 'expo-checkbox';
-
 import styled from "styled-components/native";
 import {useDispatch} from "react-redux";
-import {changeTodoStatusAC, changeTodoTitleAC, removeTodoAC} from "../../store/reducers/todo-reducer";
+
+import {changeTodoStatusAC, removeTodoAC} from "../../store/reducers/todo-reducer";
+import {MAIN_COLOR} from '../../../themes/colors'
 
 
 const WIDTH_TODO_TITLE = 0.75;
@@ -14,8 +15,6 @@ const TodoWrap = styled.View`
    flex-direction: row;
    align-items: center;
    justify-content: center;
-   
-
 `
 
 const StyleCheckbox = styled(Checkbox)`
@@ -26,13 +25,13 @@ const StyleCheckbox = styled(Checkbox)`
 
 const StyleTodo = styled.View`
    flex-direction: column;
-   margin:7px 5px 5px 5px;
+   margin:8px 5px 5px 5px;
 `
 
 const WrapTitle = styled.View`
-  padding-top: 10px;
+   padding-top: 10px;
    min-height: 35px;
-   border: 2px solid #3949ab;
+   border: 2px solid ${MAIN_COLOR};
    border-radius: 5px;
    justify-content:center;
 `
@@ -47,8 +46,7 @@ const StyleTitle = styled.Text`
    font-family: 'roboto-bold;
 `
 
-
-const StyleWrapDate = styled.Text`
+const StyleDate = styled.Text`
   align-items: center;
     font-size: 10px ;
   position: absolute;
@@ -56,7 +54,7 @@ const StyleWrapDate = styled.Text`
   padding-right: 2px;
   right: 14px;
   top: -10px;
-  border: 2px solid #3949ab;
+  border: 2px solid ${MAIN_COLOR};
   border-radius: 5px;
   text-align: center;
   align-self: center;
@@ -65,15 +63,9 @@ const StyleWrapDate = styled.Text`
 `
 
 
-const StyleDate = styled.Text`
-
-  
-`
-
-
 export const Todo = React.memo(function (props) {
 
-    const {id, title, isDone, date, time} = props
+    const {id, title, isDone, addedDate} = props
     const dispatch = useDispatch()
 
 
@@ -84,25 +76,19 @@ export const Todo = React.memo(function (props) {
 
     return (
         <TodoWrap>
-
             <StyleCheckbox
                 value={isDone}
                 isDoneStyle={isDone}
                 onValueChange={onTodoStatusChange}
             />
-            <StyleTodo
-
-                activeOpacity={0.1}
-            >
+            <StyleTodo>
                 <WrapTitle isDoneStyle={isDone}>
                     <StyleTitle isDoneStyle={isDone}>{title}</StyleTitle>
-                    <StyleWrapDate>
-                        <StyleDate isDoneStyle={isDone}> {time + ', ' + date}</StyleDate>
-                    </StyleWrapDate>
+                    <StyleDate isDoneStyle={isDone}>
+                        {addedDate.toLocaleDateString() + ', ' + addedDate.toLocaleTimeString()}
+                    </StyleDate>
                 </WrapTitle>
-
             </StyleTodo>
-
 
             <TouchableOpacity onPress={onRemovePress}>
                 <Entypo name={'circle-with-cross'} size={40} color={"#e0102a"}/>

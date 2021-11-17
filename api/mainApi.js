@@ -1,6 +1,6 @@
-var axios = require("axios").default;
+import axios from "axios"
 
-var options = {
+const options = {
     method: 'GET',
     url: 'https://transloc-api-1-2.p.rapidapi.com/agencies.json',
     params: {
@@ -14,11 +14,14 @@ var options = {
     }
 };
 
-export const getDateApi = async () =>
-    axios.request(options)
-        .then(
-            response => response.data.generated_on
-        )
-        .catch(function (error) {
-            console.error(error);
-        });
+export const MainApi = {
+    getDateApi: () =>
+        axios.request(options)
+            .then(
+                response => response.data.generated_on
+            )
+            .catch(function (error) {
+                console.error(error);
+            })
+}
+

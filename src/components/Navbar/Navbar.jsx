@@ -1,14 +1,12 @@
 import React from 'react'
-import {View, StyleSheet, Text} from "react-native";
 import styled from "styled-components/native";
-import AppTextBold from "../FontsText/AppTextBold";
-
+import {MAIN_COLOR} from '../../../themes/colors'
 
 const StyleNavbar = styled.View`
   height: 70px;
   align-items: center;
   justify-content:flex-end;
-  background-color: #3949ab;
+  background-color: ${MAIN_COLOR};
   padding-bottom: 10px;
   margin-bottom: 10px;
 

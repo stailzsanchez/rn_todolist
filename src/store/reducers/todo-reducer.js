@@ -1,24 +1,16 @@
 import uuid from 'react-native-uuid';
-import {getDateApi} from "../../../api/mainApi";
+import {MainApi} from "../../../api/mainApi";
 
 
 const initialState = [
-    {id: uuid.v4(), isDone: false, title: 'test13', date: '11/08/2021', time: '23:11:49'},
-    {id: uuid.v4(), isDone: true, title: 'test1', date: '11/08/2021', time: '23:11:49'},
-    {id: uuid.v4(), isDone: true, title: 'test2', date: '11/08/2021', time: '23:11:49'},
-    {id: uuid.v4(), isDone: false, title: 'test3', date: '11/08/2021', time: '23:11:49'},
-    {id: uuid.v4(), isDone: true, title: 'test4', date: '11/08/2021', time: '23:11:49'},
-    {id: uuid.v4(), isDone: false, title: 'test5', date: '11/08/2021', time: '23:11:49'},
-    {id: uuid.v4(), isDone: true, title: 'test6', date: '11/08/2021', time: '23:11:49'},
-    {id: uuid.v4(), isDone: false, title: 'test7', date: '11/08/2021', time: '23:11:49'},
-    {id: uuid.v4(), isDone: false, title: 'test8', date: '11/08/2021', time: '23:11:49'},
-    {id: uuid.v4(), isDone: true, title: 'test9', date: '11/08/2021', time: '23:11:49'},
-    {id: uuid.v4(), isDone: true, title: 'test10', date: '11/08/2021', time: '23:11:49'},
-    {id: uuid.v4(), isDone: true, title: 'test11', date: '11/08/2021', time: '23:11:49'},
-    {id: uuid.v4(), isDone: false, title: 'test12', date: '11/08/2021', time: '23:11:49'},
-    {id: uuid.v4(), isDone: true, title: 'test13', date: '11/08/2021', time: '23:11:49'},
-    {id: uuid.v4(), isDone: true, title: 'test14', date: '11/08/2021', time: '23:11:49'},
-    {id: uuid.v4(), isDone: true, title: 'tes11111t', date: '11/08/2021', time: '23:11:49'},
+    {id: uuid.v4(), isDone: false, title: 'Do the cleaning', addedDate: new Date()},
+    {id: uuid.v4(), isDone: true, title: 'Walk the dog', addedDate: new Date()},
+    {id: uuid.v4(), isDone: true, title: 'Buy products', addedDate: new Date()},
+    {id: uuid.v4(), isDone: false, title: 'Write to a friend', addedDate: new Date()},
+    {id: uuid.v4(), isDone: true, title: 'Drink vitamins', addedDate: new Date()},
+    {id: uuid.v4(), isDone: false, title: 'Pick up mail', addedDate: new Date()},
+    {id: uuid.v4(), isDone: true, title: 'Do the cleaning', addedDate: new Date()},
+    {id: uuid.v4(), isDone: false, title: 'Read a book', addedDate: new Date()},
 ]
 
 
@@ -26,13 +18,11 @@ export const todoReducer = (state = initialState, action) => {
     switch (action.type) {
 
         case 'ADD-TODO': {
-            const dateNow = action.date
             return [{
                 id: action.id,
                 title: action.title,
                 status: false,
-                date: dateNow.toLocaleDateString(), //date_full.format('DD-MM-YYYY'),
-                time: dateNow.toLocaleTimeString(), //date_full.format('hh:mm:ss'),
+                addedDate: action.date,
             }, ...state]
         }
         case 'REMOVE-TODO': {
@@ -43,6 +33,7 @@ export const todoReducer = (state = initialState, action) => {
             if (todo) {
                 todo.title = action.title;
             }
+            state[action.id] = {...todo}
             return [...state]
         }
         case 'CHANGE-TODO-STATUS': {
@@ -52,12 +43,7 @@ export const todoReducer = (state = initialState, action) => {
             }
             state[action.id] = {...todo}
 
-            return [
-                // ...state
-                ...state.filter(todo => !todo.isDone),
-                ...state.filter(todo => todo.isDone)
-            ]
-
+            return [...state]
         }
 
         default:
@@ -78,11 +64,6 @@ export const changeTodoStatusAC = (id) =>
     ({type: 'CHANGE-TODO-STATUS', id: id})
 
 export const addTodoWithApiDate = (title) => async (dispatch) => {
-    try {
-        const dateApi = await getDateApi()
-        dispatch(addTodoAC(title, new Date(dateApi)))
-    } catch (e) {
-        console.log('getDateApi - ', e)
-    }
-
+    const dateApi = await MainApi.getDateApi()
+    dispatch(addTodoAC(title, new Date(dateApi)))
 }

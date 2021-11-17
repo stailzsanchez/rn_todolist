@@ -1,23 +1,12 @@
 import React, {useState} from 'react';
-import {
-    StyleSheet,
-    Text,
-    View,
-    TextInput,
-    Button,
-    Alert,
-    Keyboard,
-    Dimensions,
-    Pressable,
-    TouchableOpacity
-} from 'react-native';
-import {AntDesign} from '@expo/vector-icons';
+import {Alert, Dimensions, Keyboard, TouchableOpacity} from 'react-native';
 import {MaterialIcons} from '@expo/vector-icons';
+import {MAIN_COLOR} from '../../../themes/colors'
 
 
 import styled from "styled-components/native";
 import {useDispatch} from "react-redux";
-import {addTodoWithApiDate, changeTodoTitleAC} from "../../store/reducers/todo-reducer";
+import {addTodoWithApiDate} from "../../store/reducers/todo-reducer";
 
 
 const WrapAddTodo = styled.View`
@@ -27,12 +16,9 @@ const WrapAddTodo = styled.View`
   padding-top: 10px;
 `
 
-const StyleButton = styled.Button`
-  border-radius: 20px;
-`
 
 const StyleTextInput = styled.TextInput`
-  border: 2px solid #3949ab;
+  border: 2px solid ${MAIN_COLOR};
   border-radius: 16px;
   width: ${Dimensions.get('window').width * 0.8}px;
   margin-right: 5px;
@@ -40,13 +26,6 @@ const StyleTextInput = styled.TextInput`
   padding-right: 8px;
 `
 
-
-const StyleTextError = styled.Text`
-    position: absolute;
-    bottom: 0;
-    left: 10px;
-    color: red;
-`
 
 export const AddTodo = (props) => {
 
@@ -80,7 +59,7 @@ export const AddTodo = (props) => {
                 autoCapitalize='none'
             />
             <TouchableOpacity onPress={onAddItemClick}>
-                <MaterialIcons name={'add-box'} size={41} style={{color: "#3949ab"}}/>
+                <MaterialIcons name={'add-box'} size={41} style={{color: MAIN_COLOR}}/>
             </TouchableOpacity>
         </WrapAddTodo>
     );
