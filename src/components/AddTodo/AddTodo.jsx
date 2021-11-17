@@ -23,7 +23,8 @@ import {addTodoWithApiDate, changeTodoTitleAC} from "../../store/reducers/todo-r
 const WrapAddTodo = styled.View`
   flex-direction: row;
   justify-content: center;
-  padding-bottom: 5px;
+  padding-bottom: 10px;
+  padding-top: 10px;
 `
 
 const StyleButton = styled.Button`
@@ -31,7 +32,7 @@ const StyleButton = styled.Button`
 `
 
 const StyleTextInput = styled.TextInput`
-  border: 2px solid #2196F3;
+  border: 2px solid #3949ab;
   border-radius: 16px;
   width: ${Dimensions.get('window').width * 0.8}px;
   margin-right: 5px;
@@ -79,7 +80,7 @@ export const AddTodo = (props) => {
                 autoCapitalize='none'
             />
             <TouchableOpacity onPress={onAddItemClick}>
-                <MaterialIcons name={'add-box'} size={41} style={{color: "#007AFF",}}/>
+                <MaterialIcons name={'add-box'} size={41} style={{color: "#3949ab"}}/>
             </TouchableOpacity>
         </WrapAddTodo>
     );

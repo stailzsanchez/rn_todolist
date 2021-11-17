@@ -1,6 +1,6 @@
 import {StatusBar} from 'expo-status-bar';
 import React, {useState, useRef, useEffect} from 'react';
-import {StyleSheet, Text, View, FlatList, SafeAreaView, Alert} from 'react-native';
+import {StyleSheet, Text, View, FlatList, SafeAreaView, ScrollView, Alert} from 'react-native';
 import styled from 'styled-components/native'
 import * as Font from 'expo-font'
 import AppLoading from 'expo-app-loading'
@@ -17,9 +17,8 @@ import {createStore} from "redux";
 import {store} from "./src/store";
 
 
-const StyledFlatList = styled.FlatList`
-  padding: 10px;
-  color: palevioletred;
+const StyledScrollView = styled.ScrollView`
+
 `
 
 const StyledText = styled.Text`
@@ -29,7 +28,7 @@ const StyledText = styled.Text`
 
 const StyledTodos = styled.View`
   flex: 1;
-  margin-bottom: 5px;
+
 `
 
 const StyleAddTodo = styled.TouchableOpacity`
@@ -37,44 +36,48 @@ const StyleAddTodo = styled.TouchableOpacity`
 `
 
 const StyleWrapApp = styled.SafeAreaView`
-  height: 100%;
+  flex: 1;
 `
 
 const NoTodoText = styled.Text`
   margin: 20px auto;
 `
-
+const TodoSplitSpace = styled.Text`
+  margin: 20px 0;
+  padding: 0;
+  height: 10px;
+  background-color: #3949ab;
+`
 
 export default function TodoList() {
 
     const dispatch = useDispatch()
     let todoList = useSelector(state => state.todos)
 
-    //first render sort todos Active/Completed
-    useEffect(() => {
-        return () => {
-            todoList = [
-                ...todoList.filter(todo => !todo.isDone),
-                ...todoList.filter(todo => todo.isDone)
-            ]
-        };
-    }, []);
-
+    const todosActive = [...todoList.filter(todo => !todo.isDone)]
+    const todosCompleted = [...todoList.filter(todo => todo.isDone)]
 
     const isUniqueTodo = (title) => todoList.some(todo => todo.title === title)
 
     return (
         <StyleWrapApp>
             <Navbar title='Todo App'/>
-            {todoList.length === 0 && <NoTodoText>No todos</NoTodoText>}
+
             <StyledTodos>
-                <StyledFlatList
-                    data={todoList}
-                    renderItem={({item}) =>
-                        <Todo key={item.id} {...item}
-                        />}
-                    keyExtractor={item => item.id.toString()}
-                />
+                {/*<StyledFlatList*/}
+                {/*    data={todoList}*/}
+                {/*    renderItem={({item}) =>*/}
+                {/*        <Todo key={item.id} {...item}*/}
+                {/*        />}*/}
+                {/*    keyExtractor={item => item.id.toString()}*/}
+                {/*/>*/}
+                <StyledScrollView>
+                    {todosActive.map(todo => <Todo key={todo.id} {...todo}/>)}
+                    {todosActive.length === 0 && <NoTodoText> No active todos </NoTodoText>}
+                    <TodoSplitSpace/>
+                    {todosCompleted.map(todo => <Todo key={todo.id} {...todo}/>)}
+                    {todosCompleted.length === 0 && <NoTodoText> No completed todos </NoTodoText>}
+                </StyledScrollView>
             </StyledTodos>
 
             <AddTodo

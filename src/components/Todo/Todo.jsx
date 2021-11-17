@@ -8,37 +8,36 @@ import {useDispatch} from "react-redux";
 import {changeTodoStatusAC, changeTodoTitleAC, removeTodoAC} from "../../store/reducers/todo-reducer";
 
 
-const WIDTH_TODO_TITLE = 0.71;
+const WIDTH_TODO_TITLE = 0.75;
 
 const TodoWrap = styled.View`
    flex-direction: row;
    align-items: center;
    justify-content: center;
-   width: 100%;
-   margin-bottom: 10px;
    
 
 `
 
 const StyleCheckbox = styled(Checkbox)`
-  width: 35px;
-  height: 35px;
-  color: #107A1F;
-
+  width: 25px;
+  height: 25px;
+  border: 1px solid red;
 `
 
 const StyleTodo = styled.View`
-   flex-direction: row;
-   justify-content:center;
-   align-items: center;
-   margin:5px;
+   flex-direction: column;
+   margin:7px 5px 5px 5px;
+`
 
+const WrapTitle = styled.View`
+  padding-top: 10px;
+   min-height: 35px;
+   border: 2px solid #3949ab;
+   border-radius: 5px;
+   justify-content:center;
 `
 
 const StyleTitle = styled.Text`
-   border: 1px solid #007AFF;
-   border-radius: 5px;
-   min-height: 40px;
    padding-left: 5px;
    padding-right: 5px;
    width: ${Dimensions.get('window').width * WIDTH_TODO_TITLE}px;
@@ -48,15 +47,27 @@ const StyleTitle = styled.Text`
    font-family: 'roboto-bold;
 `
 
-const StyleDate = styled.Text`
-  font-size: 10px ;
+
+const StyleWrapDate = styled.Text`
+  align-items: center;
+    font-size: 10px ;
   position: absolute;
   padding-left: 2px;
   padding-right: 2px;
   right: 14px;
-  top: -7px;
+  top: -10px;
+  border: 2px solid #3949ab;
+  border-radius: 5px;
+  text-align: center;
+  align-self: center;
   background-color: #fff;
   font-family: 'roboto-bold;
+`
+
+
+const StyleDate = styled.Text`
+
+  
 `
 
 
@@ -65,14 +76,8 @@ export const Todo = React.memo(function (props) {
     const {id, title, isDone, date, time} = props
     const dispatch = useDispatch()
 
-    const styleStatusTodo = isDone
-        ? {textDecoration: 'line-through', opacity: 0.2}
-        : {textDecoration: 'none', opacity: 1}
 
-    const onTodoStatusChange = () => {
-        dispatch(changeTodoStatusAC(id))
-    }
-
+    const onTodoStatusChange = () => dispatch(changeTodoStatusAC(id))
 
     const onRemovePress = () => dispatch(removeTodoAC(id))
 
@@ -82,22 +87,25 @@ export const Todo = React.memo(function (props) {
 
             <StyleCheckbox
                 value={isDone}
-                isDone={isDone}
+                isDoneStyle={isDone}
                 onValueChange={onTodoStatusChange}
             />
             <StyleTodo
-                isDoneStyle={isDone}
-                style={styleStatusTodo}
+
                 activeOpacity={0.1}
             >
+                <WrapTitle isDoneStyle={isDone}>
+                    <StyleTitle isDoneStyle={isDone}>{title}</StyleTitle>
+                    <StyleWrapDate>
+                        <StyleDate isDoneStyle={isDone}> {time + ', ' + date}</StyleDate>
+                    </StyleWrapDate>
+                </WrapTitle>
 
-                <StyleTitle>{title}</StyleTitle>
-                <StyleDate>{time + ', ' + date}</StyleDate>
             </StyleTodo>
 
 
             <TouchableOpacity onPress={onRemovePress}>
-                <Entypo style={{color: "red"}} name={'circle-with-cross'} size={40} color={"#007AFF"}/>
+                <Entypo name={'circle-with-cross'} size={40} color={"#e0102a"}/>
             </TouchableOpacity>
         </TodoWrap>
     );
