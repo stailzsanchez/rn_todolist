@@ -1,5 +1,5 @@
 import React from 'react';
-import {Dimensions, TouchableOpacity} from 'react-native';
+import {Dimensions, TouchableOpacity, Pressable} from 'react-native';
 import {Entypo} from '@expo/vector-icons';
 import Checkbox from 'expo-checkbox';
 import styled from "styled-components/native";
@@ -7,9 +7,55 @@ import {useDispatch} from "react-redux";
 
 import {changeTodoStatusAC, removeTodoAC} from "../../store/reducers/todo-reducer";
 import {MAIN_COLOR} from '../../../themes/colors'
+import {changeEditMode} from "../../store/reducers/todoEditing-reducer";
 
 
 const WIDTH_TODO_TITLE = 0.75;
+
+
+export const Todo = React.memo(React.forwardRef(function (props, ref) {
+
+    const {
+        id, title, isDone, addedDate,
+    } = props
+    const dispatch = useDispatch()
+
+
+    const onTodoStatusChange = () => dispatch(changeTodoStatusAC(id))
+
+    const onRemovePress = () => dispatch(removeTodoAC(id))
+
+    const onChangeTodoLongPress = () => {
+        dispatch(changeEditMode(true, id))
+        console.log('ref.value ', ref.value)
+        ref.value = title
+        ref.current.focus()
+    }
+
+    return (
+        <TodoWrap>
+            <StyleCheckbox
+                value={isDone}
+                isDoneStyle={isDone}
+                onValueChange={onTodoStatusChange}
+            />
+            <Pressable onLongPress={onChangeTodoLongPress}>
+                <StyleTodo>
+                    <WrapTitle isDoneStyle={isDone}>
+                        <StyleTitle isDoneStyle={isDone}>{title}</StyleTitle>
+                        <StyleDate isDoneStyle={isDone}>
+                            {addedDate.toLocaleDateString() + ', ' + addedDate.toLocaleTimeString()}
+                        </StyleDate>
+                    </WrapTitle>
+                </StyleTodo>
+            </Pressable>
+
+            <TouchableOpacity onPress={onRemovePress}>
+                <Entypo name={'circle-with-cross'} size={40} color={"#e0102a"}/>
+            </TouchableOpacity>
+        </TodoWrap>
+    );
+}))
 
 const TodoWrap = styled.View`
    flex-direction: row;
@@ -62,39 +108,5 @@ const StyleDate = styled.Text`
   font-family: 'roboto-bold;
 `
 
-
-export const Todo = React.memo(function (props) {
-
-    const {id, title, isDone, addedDate} = props
-    const dispatch = useDispatch()
-
-
-    const onTodoStatusChange = () => dispatch(changeTodoStatusAC(id))
-
-    const onRemovePress = () => dispatch(removeTodoAC(id))
-
-
-    return (
-        <TodoWrap>
-            <StyleCheckbox
-                value={isDone}
-                isDoneStyle={isDone}
-                onValueChange={onTodoStatusChange}
-            />
-            <StyleTodo>
-                <WrapTitle isDoneStyle={isDone}>
-                    <StyleTitle isDoneStyle={isDone}>{title}</StyleTitle>
-                    <StyleDate isDoneStyle={isDone}>
-                        {addedDate.toLocaleDateString() + ', ' + addedDate.toLocaleTimeString()}
-                    </StyleDate>
-                </WrapTitle>
-            </StyleTodo>
-
-            <TouchableOpacity onPress={onRemovePress}>
-                <Entypo name={'circle-with-cross'} size={40} color={"#e0102a"}/>
-            </TouchableOpacity>
-        </TodoWrap>
-    );
-})
 
 
